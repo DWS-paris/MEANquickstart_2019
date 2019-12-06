@@ -116,27 +116,70 @@ Config
             
                 // CRUD: create item
                 server.post('/api/:endpoint', (req, res) => {
-                    
+                    if (typeof req.body === 'undefined' || req.body === null) { sendBodyError(res, 'No body data provided') };
+
+                    // Check fields in the body
+                    const { miss, extra, ok } = checkFields( Mandatories[req.params['endpoint']] , req.body);
+                    //=> Error: bad fields provided
+                    if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
+                    else{
+                        // Create new object
+                        Models[req.params['endpoint']].create( req.body )
+                        .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { identity, user }))
+                        .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                    }
                 });
 
                 // CRUD: read all items
                 server.get('/api/:endpoint', (req, res) => {
-
+                    Models[req.params['endpoint']].find( (err, data) => {
+                        if(err){
+                            sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err)
+                        }
+                        else{
+                            sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
+                        }
+                    })
                 });
 
                 // CRUD: read one item by id
                 server.get('/api/:endpoint/:id', (req, res) => {
-
+                    Models[req.params['endpoint']].findById( req.params['id'],  (err, data) => {
+                        if(err){
+                            sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err)
+                        }
+                        else{
+                            sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
+                        }
+                    })
                 });
 
                 // CRUD: update one item by id
                 server.put('/api/:endpoint/:id', (req, res) => {
+                    if (typeof req.body === 'undefined' || req.body === null) { sendBodyError(res, 'No body data provided') };
 
+                    // Check fields in the body
+                    const { miss, extra, ok } = checkFields( Mandatories[req.params['endpoint']] , req.body);
+                    //=> Error: bad fields provided
+                    if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
+                    else{
+                        // Update object
+                        Models[req.params['endpoint']].findOneAndUpdate( { _id: req.params['id'] } , req.body )
+                        .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} updated!`, { identity, user }))
+                        .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not updated...`, err))
+                    }
                 });
 
                 // CRUD: delete one item by id
                 server.delete('/api/:endpoint/:id', (req, res) => {
-
+                    Models[req.params['endpoint']].findOneAndDelete( {_id: req.params['id']},  (err, data) => {
+                        if(err){
+                            sendApiErrorResponse(res, `${req.params['endpoint']} not deleted`, err)
+                        }
+                        else{
+                            sendApiSuccessResponse(res, `${req.params['endpoint']} deleted!`, data)
+                        }
+                    })
                 });
             //
 
