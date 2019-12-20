@@ -6,6 +6,8 @@ Import & config
 
   // Inner
   import { ContentService } from "../../services/content/content.service";
+  import { CrudService } from "../../services/crud/crud.service";
+  
 
   @Component({
     selector: 'app-form-upload-img',
@@ -28,7 +30,8 @@ Definition & export
     //
 
     constructor(
-      private ContentService: ContentService
+      private ContentService: ContentService,
+      private CrudService: CrudService,
     ) { }
 
     /* 
@@ -48,6 +51,20 @@ Definition & export
             .then( resizedImg => {
               this.resizedImg = resizedImg;
               console.log(this.resizedImg)
+
+              // Use tue CRUD service to upload image
+              this.CrudService.createItem('media', {
+                fileName: file.name,
+                fileType: file.type,
+                total: data.total,
+                value: reader.result
+              })
+              .then( apiResponse => {
+                console.log(apiResponse)
+              })
+              .catch( apiResponse => {
+                console.error(apiResponse)
+              })
             })
           }
         }
