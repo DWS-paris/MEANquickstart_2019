@@ -1,0 +1,23 @@
+<form (submit)="submitForm()">
+    <input 
+        type="file" 
+        (change)="onFileChange($event)"  
+        #fileInput
+    >
+    <button 
+        type="submit" 
+        [disabled]="formData === null"
+    >Télécharger</button>
+</form>
+
+<img
+    *ngIf="tempsImg"
+    [src]="tempsImg" 
+    alt="Image de prrofil"
+>
+
+<img
+    *ngIf="resizedImg"
+    [src]="resizedImg" 
+    alt="Image de prrofil"
+>

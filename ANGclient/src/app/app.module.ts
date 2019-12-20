@@ -1,18 +1,31 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+/* 
+Imports
+*/
+  // Angular
+  import { BrowserModule } from '@angular/platform-browser';
+  import { NgModule } from '@angular/core';
+  import { AppRoutingModule } from './app-routing.module';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+  // Inner
+  import { AppComponent } from './app.component';
+  import { FormUploadImgModule } from "./components/form-upload-img/module";
+  import { ContentService } from "./services/content/content.service";
+//
 
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+/* 
+Definition & export
+*/
+  @NgModule({
+    declarations: [
+      AppComponent
+    ],
+    imports: [
+      BrowserModule,
+      AppRoutingModule,
+      FormUploadImgModule
+    ],
+    providers: [ ContentService ],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule { }
+//
