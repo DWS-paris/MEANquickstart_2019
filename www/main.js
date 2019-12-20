@@ -366,9 +366,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/form-upload-img/module */ "./src/app/components/form-upload-img/module.ts");
-/* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./services/content/content.service */ "./src/app/services/content/content.service.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/form-upload-img/module */ "./src/app/components/form-upload-img/module.ts");
+/* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/content/content.service */ "./src/app/services/content/content.service.ts");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
 
 /*
 Imports
@@ -377,7 +379,9 @@ Imports
 
 
 
+
 // Inner
+
 
 
 
@@ -390,15 +394,16 @@ let AppModule = class AppModule {
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [
-            _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]
+            _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-            _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_5__["FormUploadImgModule"]
+            _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_6__["FormUploadImgModule"]
         ],
-        providers: [_services_content_content_service__WEBPACK_IMPORTED_MODULE_6__["ContentService"]],
-        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
+        providers: [_services_content_content_service__WEBPACK_IMPORTED_MODULE_7__["ContentService"], _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_8__["CrudService"]],
+        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
     })
 ], AppModule);
 
@@ -420,6 +425,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/content/content.service */ "./src/app/services/content/content.service.ts");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
 
 /*
 Import & config
@@ -428,6 +434,7 @@ Import & config
 
 // Inner
 
+
 let FormUploadImgComponent = 
 //
 /*
@@ -435,8 +442,9 @@ Definition & export
 */
 class FormUploadImgComponent {
     //
-    constructor(ContentService) {
+    constructor(ContentService, CrudService) {
         this.ContentService = ContentService;
+        this.CrudService = CrudService;
         /*
         Declarations
         */
@@ -455,6 +463,19 @@ class FormUploadImgComponent {
                         .then(resizedImg => {
                         this.resizedImg = resizedImg;
                         console.log(this.resizedImg);
+                        // Use tue CRUD service to upload image
+                        this.CrudService.createItem('media', {
+                            filename: file.name,
+                            filetype: file.type,
+                            total: data.total,
+                            value: this.resizedImg
+                        })
+                            .then(apiResponse => {
+                            console.log(apiResponse);
+                        })
+                            .catch(apiResponse => {
+                            console.error(apiResponse);
+                        });
                     });
                 };
             }
@@ -468,7 +489,8 @@ class FormUploadImgComponent {
     }
 };
 FormUploadImgComponent.ctorParameters = () => [
-    { type: _services_content_content_service__WEBPACK_IMPORTED_MODULE_2__["ContentService"] }
+    { type: _services_content_content_service__WEBPACK_IMPORTED_MODULE_2__["ContentService"] },
+    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] }
 ];
 FormUploadImgComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -600,6 +622,99 @@ ContentService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Definition and export
     */
 ], ContentService);
+
+//
+
+
+/***/ }),
+
+/***/ "./src/app/services/crud/crud.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/services/crud/crud.service.ts ***!
+  \***********************************************/
+/*! exports provided: CrudService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CrudService", function() { return CrudService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+
+/*
+Imports
+*/
+
+
+//
+/*
+Definition & export
+*/
+let CrudService = class CrudService {
+    //
+    constructor(HttpClient) {
+        this.HttpClient = HttpClient;
+        /*
+        Methods CRUD
+        */
+        // CRUD: Create
+        this.createItem = (endpoint, data) => {
+            // Set header
+            let myHeader = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]();
+            myHeader.append('Content-Type', 'application/json; charset=UTF-8');
+            return this.HttpClient.post(`${this.apiUrl}/${endpoint}`, data, { headers: myHeader })
+                .toPromise().then(data => this.getData(data, endpoint)).catch(this.handleError);
+        };
+        // CRUD: Read
+        this.readItem = (endpoint) => {
+            return this.HttpClient.get(`${this.apiUrl}/${endpoint}`)
+                .toPromise().then(data => this.getData(data, endpoint)).catch(this.handleError);
+        };
+        // CRUD: Read one
+        this.readOneItem = (endpoint, id) => {
+            return this.HttpClient.get(`${this.apiUrl}/${endpoint}/${id}`)
+                .toPromise().then(data => this.getData(data)).catch(this.handleError);
+        };
+        // CRUD: Update
+        this.updateItem = (endpoint, data) => {
+            // Set header
+            let myHeader = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]();
+            myHeader.append('Content-Type', 'application/json; charset=UTF-8');
+            return this.HttpClient.put(`${this.apiUrl}/${endpoint}`, data, { headers: myHeader })
+                .toPromise().then(data => this.getData(data)).catch(this.handleError);
+        };
+        // CRUD: Delete
+        this.deleteItem = (endpoint, id) => {
+            return this.HttpClient.delete(`${this.apiUrl}/${endpoint}/${id}`)
+                .toPromise().then(data => this.getData(data)).catch(this.handleError);
+        };
+        this.apiUrl = 'http://localhost:4567/api';
+    }
+    ;
+    //
+    /*
+    Methods to get API responses
+    */
+    // Get the API response
+    getData(apiResponse, endpoint = '') {
+        return apiResponse || {};
+    }
+    ;
+    // Get the API error
+    handleError(err) {
+        return Promise.reject(err);
+    }
+    ;
+};
+CrudService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+];
+CrudService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], CrudService);
 
 //
 

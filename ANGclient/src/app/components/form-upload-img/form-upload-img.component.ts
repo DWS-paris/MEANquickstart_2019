@@ -54,10 +54,10 @@ Definition & export
 
               // Use tue CRUD service to upload image
               this.CrudService.createItem('media', {
-                fileName: file.name,
-                fileType: file.type,
+                filename: file.name,
+                filetype: file.type,
                 total: data.total,
-                value: reader.result
+                value: this.resizedImg
               })
               .then( apiResponse => {
                 console.log(apiResponse)

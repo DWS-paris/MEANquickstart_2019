@@ -72,7 +72,7 @@ Method
                     reject({ content: `AWS S3 rejection`, data: error });
                 } 
                 else {
-                    resolve(data);
+                    resolve(`${process.env.SPACES_BUCKET_URL}/${keyName}`);
                 };
             });
         });

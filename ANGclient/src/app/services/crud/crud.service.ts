@@ -3,7 +3,6 @@ Imports
 */
   import { Injectable } from '@angular/core';
   import { HttpClient, HttpHeaders } from '@angular/common/http';
-  import { ObservableService } from "../obervable/observable-service.service";
 //
 
 /* 
@@ -19,8 +18,8 @@ Definition & export
       private apiUrl: String;
     //
 
-    constructor( private HttpClient: HttpClient, private ObservableService: ObservableService ){
-      this.apiUrl = 'http://localhost:9868/api';
+    constructor( private HttpClient: HttpClient ){
+      this.apiUrl = 'http://localhost:4567/api';
     };
 
     /* 
