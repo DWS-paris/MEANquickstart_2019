@@ -454,6 +454,7 @@ class FormUploadImgComponent {
                     this.ContentService.resizeImage(reader.result, 400, 400)
                         .then(resizedImg => {
                         this.resizedImg = resizedImg;
+                        console.log(this.resizedImg);
                     });
                 };
             }

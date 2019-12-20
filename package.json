@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.594.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "crypto-js": "^3.1.9-1",
