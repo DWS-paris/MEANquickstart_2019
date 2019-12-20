@@ -15,7 +15,8 @@ Import
     const Mandatories = require('./services/mandatory.service')
     const { sendBodyError, sendFieldsError, sendApiSuccessResponse, sendApiErrorResponse } = require('./services/response.service');
     const { checkFields } = require('./services/request.service');
-    const { cryptData, decryptData } = require('./services/crypto.service')
+    const { cryptData, decryptData } = require('./services/crypto.service');
+    const { uploadImage } = require('./services/media.service');
 //
 
 /* 
@@ -123,10 +124,16 @@ Config
                     //=> Error: bad fields provided
                     if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
                     else{
-                        // Create new object
-                        Models[req.params['endpoint']].create( req.body )
-                        .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { identity, user }))
-                        .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                        // Check req endpoint
+                        if( req.params['endpoint'] === 'media' ){
+
+                        }
+                        else{
+                            // Create new object
+                            Models[req.params['endpoint']].create( req.body )
+                            .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { identity, user }))
+                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                        };
                     }
                 });
 

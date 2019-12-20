@@ -51,9 +51,30 @@ Set up AWS
 /* 
 Meethod
 */
-    const createItem = (req) => {
+    const uploadImage = (req) => {
         return new Promise( (resolve, reject) => {
             const base64Data = decodeFile(req.body);
+            const randomFIleName = new Date().toTimeString().replace(/[\W_]+/g, "").substr(0,6);
+            const keyName = `${randomFIleName}_${base64Data.name}`;
+
+            let params = {
+                Bucket: process.env.SPACES_BUCKET_NAME, 
+                Key: keyName, 
+                Body: base64Data.file,
+                ACL: 'public-read',
+                ContentEncoding: 'base64',
+                ContentType: base64Data.type
+            };
+
+            awsS3.putObject(params, (error, data) => {
+                if (error) { 
+                    logger.error(`AWS S3 rejection`, [`POST /media/upload`, `awsS3.putObject`]);
+                    reject({ content: `AWS S3 rejection`, data: error });
+                } 
+                else {
+                    resolve(data);
+                };
+            });
         });
     };
 //
@@ -61,4 +82,4 @@ Meethod
 /* 
 Export
 */
-module.exports = { createItem };
+module.exports = { uploadImage };

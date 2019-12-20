@@ -6,6 +6,7 @@ Definition
         login: ['email', 'password'],
         post: ['title', 'body'],
         comment: ['postId', 'content'],
+        media: ['filename', 'filetype', 'value', 'total']
     };
 //
 
