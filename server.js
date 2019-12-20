@@ -126,7 +126,14 @@ Config
                     else{
                         // Check req endpoint
                         if( req.params['endpoint'] === 'media' ){
-
+                            // Upload image on Spaces
+                            uploadImage(req)
+                            .then( image => {
+                                sendApiSuccessResponse(res, 'Image updated', { image })
+                            })
+                            .catch( spacesError => {
+                                sendApiErrorResponse(res, 'Image not updated', spacesError)
+                            })
                         }
                         else{
                             // Create new object
