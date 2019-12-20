@@ -17,11 +17,11 @@ Set up AWS
     const spacesEndpoint = new AWS.Endpoint(process.env.SPACES_BUCKET_ENDPOINT);
     const awsS3 = new AWS.S3({ endpoint: spacesEndpoint });
 
-    // Define file slug
-    const slug = source.filename.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_").replace(/#/g, "_").replace(/["'‘’(){}]/g, "-");
-
     // Define file format
-    const decodeFile = ( souorce ) => {
+    const decodeFile = ( source ) => {
+        // Define file slug
+        const slug = source.filename.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_").replace(/#/g, "_").replace(/["'‘’(){}]/g, "-");
+        
         // Switch file type
         switch(source.filetype){
             case `image/png`:
@@ -49,7 +49,7 @@ Set up AWS
 //
 
 /* 
-Meethod
+Method
 */
     const uploadImage = (req) => {
         return new Promise( (resolve, reject) => {
