@@ -72,7 +72,13 @@ Method
                     reject({ content: `AWS S3 rejection`, data: error });
                 } 
                 else {
-                    resolve(`${process.env.SPACES_BUCKET_URL}/${keyName}`);
+                    resolve({
+                        url: `${process.env.SPACES_BUCKET_URL}/${keyName}`,
+                        name: keyName,
+                        contentSize: req.body.total,
+                        encodingFormat: base64Data.type,
+                        author: 'req.user._id'
+                    });
                 };
             });
         });

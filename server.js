@@ -129,7 +129,10 @@ Config
                             // Upload image on Spaces
                             uploadImage(req)
                             .then( image => {
-                                sendApiSuccessResponse(res, 'Image updated', { image })
+                            // Create new object
+                            Models[req.params['endpoint']].create( image )
+                            .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
+                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
                             })
                             .catch( spacesError => {
                                 sendApiErrorResponse(res, 'Image not updated', spacesError)

@@ -6,6 +6,7 @@ Definition
         user: require('./user.model'),
         post: require('./post.model'),
         comment: require('./comment.model'),
+        media: require('./media.model'),
     };
 //
 
