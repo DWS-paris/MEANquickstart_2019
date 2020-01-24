@@ -178,19 +178,36 @@ Config`
                 // CRUD: read all items
                 server.get('/api/:endpoint', (req, res) => {
                     Models[req.params['endpoint']].find( (err, data) => {
-                        if(err){
-                            sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err)
-                        }
+                        if(err){ sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err) }
                         else{
-                            sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
+                            // Check endpoint
+                            if( req.params['endpoint'] === 'post' ){
+                                // Set empty array
+                                let dataArray = [];
+
+                                (async () => {
+                                    // Loop on data
+                                    for( let item of data ){
+                                        const postComments = await Models.comment.find({ postId: item._id });
+                                        const postAuthor = await Models.user.find( { identity: item.author } )
+
+                                        // Push item data
+                                        dataArray.push( { post: item, comments: postComments, author: postAuthor } )
+                                    }
+                                    
+                                    // Send bask data
+                                    return sendApiSuccessResponse(res, `Posts found!`, dataArray)
+                                })();
+                            }
+                            else{
+                                sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
+                            }
                         }
                     })
                 });
 
                 // CRUD: read one item by id
                 server.get('/api/:endpoint/:id', (req, res) => {
-                    console.log(req.params['id'])
-
                     // Check endpoint
                     if( req.params['endpoint'] === 'post' ){
                         // Arrray oif Promise
