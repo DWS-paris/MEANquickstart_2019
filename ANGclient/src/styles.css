@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+nav ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+nav li:not(:last-child){
+    margin-right: 1rem;
+}

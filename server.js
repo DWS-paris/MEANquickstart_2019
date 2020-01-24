@@ -5,11 +5,14 @@ Import
     require('dotenv').config();
     const express = require('express');
     const bodyParser = require('body-parser');
+    const cookieParser = require('cookie-parser');
     const path = require('path');
     const ejs = require('ejs');
     const bcrypt = require('bcryptjs');
+    const passport = require('passport');
 
     // Inner
+    const { setAuthentication } = require('./services/auth.service');
     const mongoDB = require('./services/db.service');
     const Models = require('./models/index');
     const Mandatories = require('./services/mandatory.service')
@@ -20,7 +23,7 @@ Import
 //
 
 /* 
-Config
+Config`
 */
     // Declarations
     const server = express();
@@ -40,6 +43,12 @@ Config
             //=> Body-parser
             server.use(bodyParser.json({limit: '10mb'}));
             server.use(bodyParser.urlencoded({ extended: true }));
+
+            //=> Use CookieParser to setup serverside cookies
+            server.use(cookieParser(process.env.COOKIE_SECRET));
+
+            //=> Auth
+            setAuthentication(passport);
 
             // Start server
             this.launch();
@@ -81,8 +90,9 @@ Config
                     };
                 });
 
-                /// LOGIN: user connection
-                server.post('api/login', (req, res) => {
+                // LOGIN: user connection
+                server.post('/api/login', (req, res) => {
+                    console.log(req.cookies)
                     if (typeof req.body === 'undefined' || req.body === null) { sendBodyError(res, 'No body data provided') };
 
                     // Check fields in the body
@@ -91,32 +101,61 @@ Config
                     if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
                     else{
                         Models.identity.findOne( { email: req.body.email }, (err, identity) => {
-                            if( err ){
+                            if( err || identity == null ){
                                 sendApiErrorResponse(res, 'Unknow user', err)
                             }
-                            // Check user password
-                            const validPassword = bcrypt.compareSync(req.body.password, identity.password);
-                            
-                            if(!validPassword){
-                                sendApiErrorResponse(res, 'Bad password', null)
-                            }
                             else{
-                                // Get user infos
-                                Models.user.findOne( { identity: identity.id }, (err, user) => {
-                                    if( err ){
-                                        sendApiErrorResponse(res, 'Unknow user', err)
-                                    }
-                                    else{
-                                        sendApiSuccessResponse(res, 'User logged', { identity, user })
-                                    }
-                                } )
+                                // Check user password
+                                const validPassword = bcrypt.compareSync(req.body.password, identity.password);
+                                
+                                if(!validPassword){
+                                    sendApiErrorResponse(res, 'Bad password', null)
+                                }
+                                else{
+                                    // Get user infos
+                                    Models.user.findOne( { identity: identity.id }, (err, user) => {
+                                        if( err ){
+                                            sendApiErrorResponse(res, 'Unknow user', err)
+                                        }
+                                        else{
+                                            // Set cookie
+                                            res.cookie(process.env.COOKIE_NAME, identity.generateJwt(identity), { httpOnly: true });
+
+                                            sendApiSuccessResponse(res, 'User logged', { identity, user })
+                                        }
+                                    } )
+                                }
                             }
+                            
                         })
                     }
                 })
+
+                // ME: hget user data froom JWT
+                server.get('/api/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+                    // Get user ideentity from JWT
+                    Models.identity.findOne( { email: req.user.email, password: req.user.password } )
+                    .then( identity => {
+                        console.log(identity)
+                        // Get user data from idenntity _id
+                        Models.user.findOne( { identity: identity._id } )
+                        .then( user => sendApiSuccessResponse(res, 'User data', { identity, user }) )
+                        .catch( err => sendApiErrorResponse(res, 'Useer datat not found', err) )
+                    })
+                    .catch( err => sendApiErrorResponse(res, 'Unconnected user', err) )
+                })
+
+                // LOGOUT: user logout
+                server.post('/api/logout', (req, res) => {
+                    // Delete user cookies
+                    res.clearCookie(process.env.COOKIE_NAME);
+
+                    // Send back data
+                    sendApiSuccessResponse(res, 'User logged out');
+                })
             
                 // CRUD: create item
-                server.post('/api/:endpoint', (req, res) => {
+                server.post('/api/:endpoint', passport.authenticate('jwt', { session: false }), (req, res) => {
                     if (typeof req.body === 'undefined' || req.body === null) { sendBodyError(res, 'No body data provided') };
 
                     // Check fields in the body
@@ -124,26 +163,10 @@ Config
                     //=> Error: bad fields provided
                     if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
                     else{
-                        // Check req endpoint
-                        if( req.params['endpoint'] === 'media' ){
-                            // Upload image on Spaces
-                            uploadImage(req)
-                            .then( image => {
-                            // Create new object
-                            Models[req.params['endpoint']].create( image )
-                            .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
-                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
-                            })
-                            .catch( spacesError => {
-                                sendApiErrorResponse(res, 'Image not updated', spacesError)
-                            })
-                        }
-                        else{
-                            // Create new object
-                            Models[req.params['endpoint']].create( req.body )
-                            .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { identity, user }))
-                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
-                        };
+                        // Create new object
+                        Models[req.params['endpoint']].create( req.body )
+                        .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
+                        .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
                     }
                 });
 
@@ -172,7 +195,7 @@ Config
                 });
 
                 // CRUD: update one item by id
-                server.put('/api/:endpoint/:id', (req, res) => {
+                server.put('/api/:endpoint/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
                     if (typeof req.body === 'undefined' || req.body === null) { sendBodyError(res, 'No body data provided') };
 
                     // Check fields in the body
@@ -182,13 +205,13 @@ Config
                     else{
                         // Update object
                         Models[req.params['endpoint']].findOneAndUpdate( { _id: req.params['id'] } , req.body )
-                        .then( user => sendApiSuccessResponse(res, `${req.params['endpoint']} updated!`, { identity, user }))
+                        .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} updated!`, { data }))
                         .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not updated...`, err))
                     }
                 });
 
                 // CRUD: delete one item by id
-                server.delete('/api/:endpoint/:id', (req, res) => {
+                server.delete('/api/:endpoint/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
                     Models[req.params['endpoint']].findOneAndDelete( {_id: req.params['id']},  (err, data) => {
                         if(err){
                             sendApiErrorResponse(res, `${req.params['endpoint']} not deleted`, err)
@@ -201,7 +224,7 @@ Config
             //
 
             /* Front router */
-            server.get('/',  (req, res) => res.render('index') );
+            server.get('/*',  (req, res) => res.render('index') );
         };
 
         launch(){

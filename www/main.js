@@ -5,21 +5,37 @@
   !*** ./$$_lazy_route_resource lazy namespace object ***!
   \******************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-function webpackEmptyAsyncContext(req) {
-	// Here Promise.resolve().then() is used instead of new Promise() to prevent
-	// uncaught exception popping up in devtools
-	return Promise.resolve().then(function() {
-		var e = new Error("Cannot find module '" + req + "'");
-		e.code = 'MODULE_NOT_FOUND';
-		throw e;
+var map = {
+	"./routes/home-page/module": [
+		"./src/app/routes/home-page/module.ts",
+		"routes-home-page-module"
+	],
+	"./routes/user-page/module": [
+		"./src/app/routes/user-page/module.ts",
+		"routes-user-page-module"
+	]
+};
+function webpackAsyncContext(req) {
+	if(!__webpack_require__.o(map, req)) {
+		return Promise.resolve().then(function() {
+			var e = new Error("Cannot find module '" + req + "'");
+			e.code = 'MODULE_NOT_FOUND';
+			throw e;
+		});
+	}
+
+	var ids = map[req], id = ids[0];
+	return __webpack_require__.e(ids[1]).then(function() {
+		return __webpack_require__(id);
 	});
 }
-webpackEmptyAsyncContext.keys = function() { return []; };
-webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
-module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
+module.exports = webpackAsyncContext;
 
 /***/ }),
 
@@ -32,7 +48,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-form-upload-img></app-form-upload-img>");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-header></app-header>\n<router-outlet></router-outlet>");
 
 /***/ }),
 
@@ -46,6 +62,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<form (submit)=\"submitForm()\">\n    <input \n        type=\"file\" \n        (change)=\"onFileChange($event)\"  \n        #fileInput\n    >\n    <button \n        type=\"submit\" \n        [disabled]=\"formData === null\"\n    >Télécharger</button>\n</form>\n\n<img\n    *ngIf=\"tempsImg\"\n    [src]=\"tempsImg\" \n    alt=\"Image de prrofil\"\n>\n\n<img\n    *ngIf=\"resizedImg\"\n    [src]=\"resizedImg\" \n    alt=\"Image de prrofil\"\n>");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/components/header/header.component.html":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/components/header/header.component.html ***!
+  \***********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<header>\n    <nav>\n        <ul>\n            <li><a [routerLink]=\"'/'\">Home</a></li>\n            <li *ngIf=\"userData\"><a  [routerLink]=\"'/me'\">Me</a></li>\n            <li *ngIf=\"userData\"><a (click)=\"logout()\">Logout</a></li>\n        </ul>\n    </nav>\n</header>");
 
 /***/ }),
 
@@ -367,10 +396,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/form-upload-img/module */ "./src/app/components/form-upload-img/module.ts");
-/* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./services/content/content.service */ "./src/app/services/content/content.service.ts");
-/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _app_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.router */ "./src/app/app.router.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/form-upload-img/module */ "./src/app/components/form-upload-img/module.ts");
+/* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./services/content/content.service */ "./src/app/services/content/content.service.ts");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+/* harmony import */ var _services_observable_observable_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./services/observable/observable.service */ "./src/app/services/observable/observable.service.ts");
+/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/components/header/header.component.ts");
 
 /*
 Imports
@@ -380,7 +413,11 @@ Imports
 
 
 
+
 // Inner
+
+
+
 
 
 
@@ -394,18 +431,123 @@ let AppModule = class AppModule {
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
         declarations: [
-            _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]
+            _app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"],
+            _components_header_header_component__WEBPACK_IMPORTED_MODULE_12__["HeaderComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterModule"].forRoot(_app_router__WEBPACK_IMPORTED_MODULE_6__["MainRouter"], { onSameUrlNavigation: 'reload' }),
             _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-            _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_6__["FormUploadImgModule"]
+            _components_form_upload_img_module__WEBPACK_IMPORTED_MODULE_8__["FormUploadImgModule"]
         ],
-        providers: [_services_content_content_service__WEBPACK_IMPORTED_MODULE_7__["ContentService"], _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_8__["CrudService"]],
-        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
+        providers: [_services_content_content_service__WEBPACK_IMPORTED_MODULE_9__["ContentService"], _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_10__["CrudService"], _services_observable_observable_service__WEBPACK_IMPORTED_MODULE_11__["ObservableService"]],
+        bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
     })
 ], AppModule);
+
+//
+
+
+/***/ }),
+
+/***/ "./src/app/app.router.ts":
+/*!*******************************!*\
+  !*** ./src/app/app.router.ts ***!
+  \*******************************/
+/*! exports provided: MainRouter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainRouter", function() { return MainRouter; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _auth_guard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth.guard */ "./src/app/auth.guard.ts");
+
+// Inner
+
+//
+/*
+Export
+*/
+const MainRouter = [
+    {
+        path: '',
+        loadChildren: './routes/home-page/module#Module'
+    },
+    {
+        path: 'me',
+        loadChildren: './routes/user-page/module#Module',
+        canActivate: [_auth_guard__WEBPACK_IMPORTED_MODULE_1__["AuthGuard"]]
+    }
+];
+//
+
+
+/***/ }),
+
+/***/ "./src/app/auth.guard.ts":
+/*!*******************************!*\
+  !*** ./src/app/auth.guard.ts ***!
+  \*******************************/
+/*! exports provided: AuthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+
+/*
+Imports & definition
+*/
+// Imports
+
+
+
+// Definition
+let AuthGuard = 
+//
+/*
+Export
+*/
+class AuthGuard {
+    /*
+    Properties
+    */
+    constructor(Router, CrudService) {
+        this.Router = Router;
+        this.CrudService = CrudService;
+    }
+    //
+    /*
+    Auth strategy
+    Parameters are used to define specific methods (if needed)
+    */
+    canActivate(next, state) {
+        return new Promise((resolve, reject) => {
+            this.CrudService.readItem('me')
+                .then(apiResponse => resolve(true))
+                .catch(apiResponnse => this.Router.navigateByUrl('/'));
+        });
+    }
+};
+AuthGuard.ctorParameters = () => [
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
+    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] }
+];
+AuthGuard = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+    //
+    /*
+    Export
+    */
+], AuthGuard);
 
 //
 
@@ -556,6 +698,82 @@ FormUploadImgModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/components/header/header.component.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/components/header/header.component.ts ***!
+  \*******************************************************/
+/*! exports provided: HeaderComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderComponent", function() { return HeaderComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _services_observable_observable_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/observable/observable.service */ "./src/app/services/observable/observable.service.ts");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+
+/*
+Imports
+*/
+// Angular
+
+// Inner
+
+
+// Definition
+let HeaderComponent = 
+// 
+/*
+Export
+*/
+class HeaderComponent {
+    constructor(ObservableService, CrudService) {
+        this.ObservableService = ObservableService;
+        this.CrudService = CrudService;
+        this.logout = () => {
+            this.CrudService.createItem('logout', null)
+                .then(apiResponse => {
+                this.ObservableService.setObservableData('login', null);
+            })
+                .catch(apiResponse => console.log(apiResponse));
+        };
+        // Get logged user data from Observable
+        this.ObservableService.getLoggedUser().subscribe(loggedUerData => {
+            if (loggedUerData === null) {
+                this.userData = null;
+                this.CrudService.readItem('me')
+                    .then(apiResponse => console.log(apiResponse))
+                    .catch(apiResponse => console.log(apiResponse));
+            }
+            else {
+                this.userData = loggedUerData;
+            }
+        });
+    }
+    ngOnInit() {
+    }
+};
+HeaderComponent.ctorParameters = () => [
+    { type: _services_observable_observable_service__WEBPACK_IMPORTED_MODULE_2__["ObservableService"] },
+    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] }
+];
+HeaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-header',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./header.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/components/header/header.component.html")).default
+    })
+    // 
+    /*
+    Export
+    */
+], HeaderComponent);
+
+//
+
+
+/***/ }),
+
 /***/ "./src/app/services/content/content.service.ts":
 /*!*****************************************************!*\
   !*** ./src/app/services/content/content.service.ts ***!
@@ -641,10 +859,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _observable_observable_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../observable/observable.service */ "./src/app/services/observable/observable.service.ts");
 
 /*
 Imports
 */
+
 
 
 //
@@ -653,8 +873,9 @@ Definition & export
 */
 let CrudService = class CrudService {
     //
-    constructor(HttpClient) {
+    constructor(HttpClient, ObservableService) {
         this.HttpClient = HttpClient;
+        this.ObservableService = ObservableService;
         /*
         Methods CRUD
         */
@@ -698,6 +919,16 @@ let CrudService = class CrudService {
     */
     // Get the API response
     getData(apiResponse, endpoint = '') {
+        switch (endpoint) {
+            case 'login':
+                this.ObservableService.setObservableData('login', apiResponse.data);
+                break;
+            case 'me':
+                this.ObservableService.setObservableData('login', apiResponse.data);
+                break;
+            default:
+                break;
+        }
         return apiResponse || {};
     }
     ;
@@ -708,7 +939,8 @@ let CrudService = class CrudService {
     ;
 };
 CrudService.ctorParameters = () => [
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+    { type: _observable_observable_service__WEBPACK_IMPORTED_MODULE_3__["ObservableService"] }
 ];
 CrudService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
@@ -717,6 +949,70 @@ CrudService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 ], CrudService);
 
 //
+
+
+/***/ }),
+
+/***/ "./src/app/services/observable/observable.service.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/services/observable/observable.service.ts ***!
+  \***********************************************************/
+/*! exports provided: ObservableService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObservableService", function() { return ObservableService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+
+/*
+Imports
+*/
+
+
+//
+let ObservableService = class ObservableService {
+    constructor() {
+        /*
+        Set observable empty object
+        */
+        this.loggedUser = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
+        this.postCollection = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
+        //
+        /*
+        Function to set observable data
+        */
+        this.setObservableData = (type, data) => {
+            switch (type) {
+                case 'login':
+                    this.loggedUser.next(data);
+                    break;
+                case 'post':
+                    this.postCollection.next(data);
+                    break;
+                default:
+                    break;
+            }
+            ;
+        };
+    }
+    //
+    /*
+    Observers functions
+    */
+    getLoggedUser() { return this.loggedUser; }
+    ;
+    getPostCollectionn() { return this.postCollection; }
+    ;
+};
+ObservableService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], ObservableService);
+
 
 
 /***/ }),

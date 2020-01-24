@@ -3,6 +3,7 @@ Imports
 */
   import { Injectable } from '@angular/core';
   import { HttpClient, HttpHeaders } from '@angular/common/http';
+  import { ObservableService } from "../observable/observable.service";
 //
 
 /* 
@@ -18,7 +19,7 @@ Definition & export
       private apiUrl: String;
     //
 
-    constructor( private HttpClient: HttpClient ){
+    constructor( private HttpClient: HttpClient, private ObservableService: ObservableService ){
       this.apiUrl = 'http://localhost:4567/api';
     };
 
@@ -71,6 +72,20 @@ Definition & export
     */
       // Get the API response
       private getData(apiResponse: any, endpoint: String = ''){
+
+        switch( endpoint ){
+          case 'login':
+          this.ObservableService.setObservableData('login', apiResponse.data );
+          break;
+
+          case 'me':
+          this.ObservableService.setObservableData('login', apiResponse.data );
+          break;
+          
+          default:
+          break;
+        }
+
         return apiResponse || {};
       };
 
