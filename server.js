@@ -163,6 +163,11 @@ Config`
                     //=> Error: bad fields provided
                     if (!ok) { sendFieldsError(res, 'Bad fields provided', miss, extra) }
                     else{
+                        // Check endpoint
+                        if( req.params['endpoint'] === 'post' ){
+                            req.body.author = req.user._id
+                        }
+
                         // Create new object
                         Models[req.params['endpoint']].create( req.body )
                         .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
@@ -184,14 +189,33 @@ Config`
 
                 // CRUD: read one item by id
                 server.get('/api/:endpoint/:id', (req, res) => {
-                    Models[req.params['endpoint']].findById( req.params['id'],  (err, data) => {
-                        if(err){
-                            sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err)
-                        }
-                        else{
-                            sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
-                        }
-                    })
+                    console.log(req.params['id'])
+
+                    // Check endpoint
+                    if( req.params['endpoint'] === 'post' ){
+                        // Arrray oif Promise
+                        return Promise.all([
+                            Models.post.findById( req.params['id']),
+                            Models.comment.find( { postId: req.params['id'] } )
+                        ])
+                        .then( async data => {
+                            let postAuthor = await Models.user.find( { identity: data[0].author } )
+                            return sendApiSuccessResponse(res, `Post found!`, { data, postAuthor })
+                        })
+                        .catch( err => {
+                            return sendApiErrorResponse(res, `Post not found`, err)
+                        })
+                    }
+                    else{
+                        Models[req.params['endpoint']].findById( req.params['id'],  (err, data) => {
+                            if(err){
+                                sendApiErrorResponse(res, `${req.params['endpoint']} not found`, err)
+                            }
+                            else{
+                                sendApiSuccessResponse(res, `${req.params['endpoint']} found!`, data)
+                            }
+                        })
+                    }                    
                 });
 
                 // CRUD: update one item by id

@@ -10,7 +10,8 @@ Definition
 */
     const MongooseSchema = new Schema({
         title: String,
-        body: String
+        body: String,
+        author: String
     });
 //
 
