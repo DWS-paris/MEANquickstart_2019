@@ -79,8 +79,8 @@ Config`
                                 // Create new user
                                 Models.user.create({
                                     identity: identity.id,
-                                    firstname: req.body.firstname,
-                                    lastname: req.body.lastname
+                                    firstname: cryptData(req.body.firstname),
+                                    lastname: cryptData(req.body.lastname)
                                 })
                                 .then( user => sendApiSuccessResponse(res, 'User created', { identity, user }))
                                 .catch( err => sendApiErrorResponse(res, 'User noot created', err))
@@ -139,7 +139,14 @@ Config`
                         console.log(identity)
                         // Get user data from idenntity _id
                         Models.user.findOne( { identity: identity._id } )
-                        .then( user => sendApiSuccessResponse(res, 'User data', { identity, user }) )
+                        .then( user => {
+                            // Decrypt data
+                            user.firstname = decryptData(user.firstname);
+                            user.lastname = decryptData(user.lastname);
+
+                            // Send clear data
+                            sendApiSuccessResponse(res, 'User data', { identity, user })
+                        } )
                         .catch( err => sendApiErrorResponse(res, 'Useer datat not found', err) )
                     })
                     .catch( err => sendApiErrorResponse(res, 'Unconnected user', err) )
