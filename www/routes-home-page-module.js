@@ -13,6 +13,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/components/form-media/form-media.component.html":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/components/form-media/form-media.component.html ***!
+  \*******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<form [formGroup]=\"form\" (submit)=\"submitForm()\" id=\"mediaFormUploader\">\n    <input type=\"file\" id=\"source\" (change)=\"onFileChange($event)\" #fileInput >\n    <button type=\"submit\" class=\"addMedia\" [disabled]=\"formData === null\">Télécharger</button>\n</form>");
+
+/***/ }),
+
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/routes/home-page/home-page.component.html":
 /*!*************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/routes/home-page/home-page.component.html ***!
@@ -22,7 +35,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<app-form-login></app-form-login>");
+/* harmony default export */ __webpack_exports__["default"] = ("<app-form-login></app-form-login>\n<app-form-media></app-form-media>");
 
 /***/ }),
 
@@ -165,6 +178,140 @@ FormLoginModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/components/form-media/form-media.component.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/components/form-media/form-media.component.ts ***!
+  \***************************************************************/
+/*! exports provided: FormMediaComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormMediaComponent", function() { return FormMediaComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+
+/*
+Imports & definition
+*/
+// Imports
+
+
+// Inner
+
+// Definition
+let FormMediaComponent = 
+//
+/* Export */
+class FormMediaComponent {
+    // Instanciation
+    constructor(FormBuilder, CrudService) {
+        this.FormBuilder = FormBuilder;
+        this.CrudService = CrudService;
+        //
+        /*
+        Methods
+        */
+        // Reset form
+        this.resetForm = () => {
+            // Set validator
+            this.form = this.FormBuilder.group({
+                email: [undefined, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                password: [undefined, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+            });
+        };
+        // Get form change
+        this.onFileChange = event => {
+        };
+        // Submit form
+        this.submitForm = () => {
+            // Use the service to connect user
+            console.log(this.form.value);
+        };
+    }
+    ;
+    //
+    /*
+    Hooks
+    */
+    ngOnInit() {
+        this.resetForm();
+    }
+    ;
+};
+FormMediaComponent.ctorParameters = () => [
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"] },
+    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] }
+];
+FormMediaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-form-media',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-media.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/components/form-media/form-media.component.html")).default,
+    })
+    //
+    /* Export */
+], FormMediaComponent);
+
+;
+//
+
+
+/***/ }),
+
+/***/ "./src/app/components/form-media/module.ts":
+/*!*************************************************!*\
+  !*** ./src/app/components/form-media/module.ts ***!
+  \*************************************************/
+/*! exports provided: FormMediaModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormMediaModule", function() { return FormMediaModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _form_media_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./form-media.component */ "./src/app/components/form-media/form-media.component.ts");
+
+/*
+Imports
+*/
+// Angular
+
+
+
+
+// Inner
+
+// 
+/*
+Definition & export
+*/
+let FormMediaModule = class FormMediaModule {
+};
+FormMediaModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+        declarations: [_form_media_component__WEBPACK_IMPORTED_MODULE_5__["FormMediaComponent"]],
+        imports: [
+            _angular_common__WEBPACK_IMPORTED_MODULE_3__["CommonModule"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["ReactiveFormsModule"]
+        ],
+        exports: [_form_media_component__WEBPACK_IMPORTED_MODULE_5__["FormMediaComponent"]]
+    })
+], FormMediaModule);
+
+;
+//
+
+
+/***/ }),
+
 /***/ "./src/app/routes/home-page/home-page.component.ts":
 /*!*********************************************************!*\
   !*** ./src/app/routes/home-page/home-page.component.ts ***!
@@ -211,6 +358,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./router */ "./src/app/routes/home-page/router.ts");
 /* harmony import */ var _home_page_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./home-page.component */ "./src/app/routes/home-page/home-page.component.ts");
 /* harmony import */ var _components_form_login_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/form-login/module */ "./src/app/components/form-login/module.ts");
+/* harmony import */ var _components_form_media_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/form-media/module */ "./src/app/components/form-media/module.ts");
 
 /*
 Imports
@@ -219,6 +367,7 @@ Imports
 
 
 // Inner
+
 
 
 
@@ -239,7 +388,8 @@ Module = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
             _router__WEBPACK_IMPORTED_MODULE_3__["Routing"],
-            _components_form_login_module__WEBPACK_IMPORTED_MODULE_5__["FormLoginModule"]
+            _components_form_login_module__WEBPACK_IMPORTED_MODULE_5__["FormLoginModule"],
+            _components_form_media_module__WEBPACK_IMPORTED_MODULE_6__["FormMediaModule"]
         ]
     })
     //

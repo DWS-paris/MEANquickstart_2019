@@ -9,6 +9,7 @@ Imports
     import { Routing } from './router';
     import { HomePageComponent } from './home-page.component';
     import { FormLoginModule } from "../../components/form-login/module";
+    import { FormMediaModule } from "../../components/form-media/module";
 //
 
 
@@ -20,7 +21,8 @@ Definition
         imports: [ 
             CommonModule, 
             Routing,
-            FormLoginModule
+            FormLoginModule,
+            FormMediaModule
         ]
     })
 //
