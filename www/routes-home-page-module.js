@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<form [formGroup]=\"form\" (submit)=\"submitForm()\" id=\"mediaFormUploader\">\n    <input type=\"file\" id=\"source\" (change)=\"onFileChange($event)\" #fileInput >\n    <button type=\"submit\" class=\"addMedia\" [disabled]=\"formData === null\">Télécharger</button>\n</form>");
+/* harmony default export */ __webpack_exports__["default"] = ("<form [formGroup]=\"form\" (submit)=\"submitForm()\" id=\"mediaFormUploader\">\n    <input type=\"file\" id=\"source\" (change)=\"onFileChange($event)\" #fileInput >\n    <button type=\"submit\" class=\"addMedia\" [disabled]=\"formData === null\">Télécharger</button>\n</form>\n\n<img *ngIf=\"base64image !== null\" [src]=\"base64image\" alt=\"Nouvelle image\">");
 
 /***/ }),
 
@@ -210,6 +210,7 @@ class FormMediaComponent {
     constructor(FormBuilder, CrudService) {
         this.FormBuilder = FormBuilder;
         this.CrudService = CrudService;
+        this.base64image = null;
         //
         /*
         Methods
@@ -218,12 +219,8 @@ class FormMediaComponent {
         this.resetForm = () => {
             // Set validator
             this.form = this.FormBuilder.group({
-                email: [undefined, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-                password: [undefined, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+                source: null
             });
-        };
-        // Get form change
-        this.onFileChange = event => {
         };
         // Submit form
         this.submitForm = () => {
@@ -232,6 +229,24 @@ class FormMediaComponent {
         };
     }
     ;
+    // Get form change
+    onFileChange(event) {
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let file = event.target.files[0];
+            reader.readAsDataURL(file);
+            reader.onload = (data) => {
+                this.base64image = reader.result;
+                this.formData = {
+                    filename: file.name,
+                    filetype: file.type,
+                    total: data.total,
+                    value: reader.result
+                };
+                console.log(this.formData);
+            };
+        }
+    }
     //
     /*
     Hooks

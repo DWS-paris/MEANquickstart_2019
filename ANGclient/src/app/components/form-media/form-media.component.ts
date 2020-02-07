@@ -25,6 +25,7 @@ Imports & definition
       // Declaration
       public form: FormGroup;
       public formData: any;
+      public base64image = null;
 
       // Instanciation
       constructor(
@@ -41,14 +42,34 @@ Imports & definition
       private resetForm = () => {
         // Set validator
         this.form = this.FormBuilder.group({
-          email: [undefined, Validators.required],
-          password: [undefined, Validators.required]
+          source: null
         });
       };
 
       // Get form change
-      public onFileChange = event => {
+      public onFileChange(event) {
+        let reader = new FileReader();
+        if(event.target.files && event.target.files.length > 0) {
+          let file = event.target.files[0];
+          reader.readAsDataURL(file);
 
+          
+
+          reader.onload = (data) => {
+
+            
+            this.base64image = reader.result;
+
+            this.formData = {
+              filename: file.name,
+              filetype: file.type,
+              total: data.total,
+              value: reader.result
+            }
+
+            console.log(this.formData)
+          };
+        }
       }
 
       // Submit form

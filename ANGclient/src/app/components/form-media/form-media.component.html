@@ -2,3 +2,5 @@
     <input type="file" id="source" (change)="onFileChange($event)" #fileInput >
     <button type="submit" class="addMedia" [disabled]="formData === null">Télécharger</button>
 </form>
+
+<img *ngIf="base64image !== null" [src]="base64image" alt="Nouvelle image">
