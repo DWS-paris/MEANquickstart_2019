@@ -22,7 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<form [formGroup]=\"form\" (submit)=\"submitForm()\" id=\"mediaFormUploader\">\n    <input type=\"file\" id=\"source\" (change)=\"onFileChange($event)\" #fileInput >\n    <button type=\"submit\" class=\"addMedia\" [disabled]=\"formData === null\">Télécharger</button>\n</form>\n\n<img *ngIf=\"base64image !== null\" [src]=\"base64image\" alt=\"Nouvelle image\">");
+/* harmony default export */ __webpack_exports__["default"] = ("<form [formGroup]=\"form\" (submit)=\"submitForm()\" id=\"mediaFormUploader\">\n    <input type=\"file\" id=\"source\" (change)=\"onFileChange($event)\" #fileInput >\n    <button type=\"submit\" class=\"addMedia\" [disabled]=\"base64image === null\">Télécharger</button>\n</form>\n\n<img *ngIf=\"base64image !== null\" [src]=\"base64image\" alt=\"Nouvelle image\">");
 
 /***/ }),
 
@@ -192,6 +192,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 /* harmony import */ var _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/crud/crud.service */ "./src/app/services/crud/crud.service.ts");
+/* harmony import */ var _services_content_content_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/content/content.service */ "./src/app/services/content/content.service.ts");
 
 /*
 Imports & definition
@@ -201,15 +202,17 @@ Imports & definition
 
 // Inner
 
+
 // Definition
 let FormMediaComponent = 
 //
 /* Export */
 class FormMediaComponent {
     // Instanciation
-    constructor(FormBuilder, CrudService) {
+    constructor(FormBuilder, CrudService, ContentService) {
         this.FormBuilder = FormBuilder;
         this.CrudService = CrudService;
+        this.ContentService = ContentService;
         this.base64image = null;
         //
         /*
@@ -221,13 +224,36 @@ class FormMediaComponent {
             this.form = this.FormBuilder.group({
                 source: null
             });
+            this.base64image = null;
+        };
+        // Get form change
+        this.onFileChange = (event) => {
+            // Geet event data
+            let reader = new FileReader();
+            if (event.target.files && event.target.files.length > 0) {
+                // Set data to extract
+                let file = event.target.files[0];
+                reader.readAsDataURL(file);
+                reader.onload = (data) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+                    // Set image to display
+                    this.base64image = reader.result;
+                    // Set image data to save
+                    this.formData = {
+                        filename: file.name,
+                        filetype: file.type,
+                        total: data.total,
+                        value: yield this.ContentService.resizeImage(reader.result, 800, 800)
+                    };
+                });
+            }
         };
         // Submit form
         this.submitForm = () => {
-            // Use the service to connect user
+            // Use the service to upload image
             this.CrudService.createItem('media', this.formData)
                 .then(spaceResponse => {
                 console.log(spaceResponse);
+                this.resetForm();
             })
                 .catch(spaceError => {
                 console.log(spaceError);
@@ -235,23 +261,6 @@ class FormMediaComponent {
         };
     }
     ;
-    // Get form change
-    onFileChange(event) {
-        let reader = new FileReader();
-        if (event.target.files && event.target.files.length > 0) {
-            let file = event.target.files[0];
-            reader.readAsDataURL(file);
-            reader.onload = (data) => {
-                this.base64image = reader.result;
-                this.formData = {
-                    filename: file.name,
-                    filetype: file.type,
-                    total: data.total,
-                    value: reader.result
-                };
-            };
-        }
-    }
     //
     /*
     Hooks
@@ -263,7 +272,8 @@ class FormMediaComponent {
 };
 FormMediaComponent.ctorParameters = () => [
     { type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"] },
-    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] }
+    { type: _services_crud_crud_service__WEBPACK_IMPORTED_MODULE_3__["CrudService"] },
+    { type: _services_content_content_service__WEBPACK_IMPORTED_MODULE_4__["ContentService"] }
 ];
 FormMediaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

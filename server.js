@@ -183,13 +183,14 @@ Config`
                             // Upload image on DigitalOcean Space
                             uploadImage(req)
                             .then( spaceResponse => {
-                                return res.json(spaceResponse)
+                                // Create new object
+                                Models[req.params['endpoint']].create( spaceResponse )
+                                .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
+                                .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
                             })
                             .catch( spaceError => {
                                 return res.json(spaceError)
                             })
-                            
-                            // Save data in Mono
                         }
 
                         else{
