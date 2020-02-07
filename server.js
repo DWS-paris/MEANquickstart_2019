@@ -172,13 +172,34 @@ Config`
                     else{
                         // Check endpoint
                         if( req.params['endpoint'] === 'post' ){
-                            req.body.author = req.user._id
+                            req.body.author = req.user._id;
+
+                            // Create new object
+                            Models[req.params['endpoint']].create( req.body )
+                            .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
+                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                        }
+                        else if( req.params['endpoint'] === 'media' ){
+                            // Upload image on DigitalOcean Space
+                            uploadImage(req)
+                            .then( spaceResponse => {
+                                return res.json(spaceResponse)
+                            })
+                            .catch( spaceError => {
+                                return res.json(spaceError)
+                            })
+                            
+                            // Save data in Mono
                         }
 
-                        // Create new object
-                        Models[req.params['endpoint']].create( req.body )
-                        .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
-                        .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                        else{
+                            // Create new object
+                            Models[req.params['endpoint']].create( req.body )
+                            .then( data => sendApiSuccessResponse(res, `${req.params['endpoint']} created!`, { data }))
+                            .catch( err => sendApiErrorResponse(res, `${req.params['endpoint']} not created...`, err))
+                        }
+
+                        
                     }
                 });
 

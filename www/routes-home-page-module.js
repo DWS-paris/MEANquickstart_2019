@@ -225,7 +225,13 @@ class FormMediaComponent {
         // Submit form
         this.submitForm = () => {
             // Use the service to connect user
-            console.log(this.form.value);
+            this.CrudService.createItem('media', this.formData)
+                .then(spaceResponse => {
+                console.log(spaceResponse);
+            })
+                .catch(spaceError => {
+                console.log(spaceError);
+            });
         };
     }
     ;
@@ -243,7 +249,6 @@ class FormMediaComponent {
                     total: data.total,
                     value: reader.result
                 };
-                console.log(this.formData);
             };
         }
     }
